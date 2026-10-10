@@ -1,147 +1,143 @@
-import flet as ft 
+import flet as ft
+
 def main(page: ft.Page):
-    page.title="simplexe solver"
-    page.vertical_alignment=ft.MainAxisAlignment.START
-    page.horizontal_alignment=ft.CrossAxisAlignment.CENTER
-    page.scroll=ft.ScrollMode.AUTO
+    page.title = "Simplexe Solver"
+    page.vertical_alignment = ft.MainAxisAlignment.START
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.scroll = ft.ScrollMode.AUTO
     
+    title_text = ft.Text("Objective Function", size=18, weight=ft.FontWeight.BOLD)
     
-    title_text=ft.Text("Objective Function",size=18,weight=ft.FontWeight.BOLD)
-    
-    
-    x1_input=ft.TextField(label="x1 coef",width=150)
-    x2_input=ft.TextField(label="x2 coef",width=150)
-    inputs_row=ft.Row(
-        [x1_input,x2_input],
+    x1_input = ft.TextField(label="x1 coef", width=150)
+    x2_input = ft.TextField(label="x2 coef", width=150)
+    inputs_row = ft.Row(
+        [x1_input, x2_input],
         alignment=ft.MainAxisAlignment.CENTER,
         spacing=10
-        )
+    )
     
-    selected_objective="Max"
+    selected_objective = "Max"
     def Objective_clicked(e):
         nonlocal selected_objective
         if e.control.text == "Max":
-            selected_objective="Max"
-            Max_btn.bgcolor=ft.Colors.BLUE
-            Max_btn.color=ft.Colors.WHITE
-            Min_btn.bgcolor=ft.Colors.GREY_200
-            Min_btn.color=ft.Colors.BLACK
+            selected_objective = "Max"
+            Max_btn.bgcolor = ft.colors.BLUE
+            Max_btn.color = ft.colors.WHITE
+            Min_btn.bgcolor = ft.colors.GREY_200
+            Min_btn.color = ft.colors.BLACK
         else:
-            selected_objective="Min"
-            Min_btn.bgcolor=ft.Colors.BLUE
-            Min_btn.color=ft.Colors.WHITE
-            Max_btn.bgcolor=ft.Colors.GREY_200
-            Max_btn.color=ft.Colors.BLACK
+            selected_objective = "Min"
+            Min_btn.bgcolor = ft.colors.BLUE
+            Min_btn.color = ft.colors.WHITE
+            Max_btn.bgcolor = ft.colors.GREY_200
+            Max_btn.color = ft.colors.BLACK
         page.update()    
     
-    
-    Max_btn=ft.ElevatedButton("Max",bgcolor=ft.Colors.BLUE,color=ft.Colors.WHITE,width=90,on_click=Objective_clicked)
-    Min_btn = ft.ElevatedButton("Min", bgcolor=ft.Colors.GREY_200, color=ft.Colors.BLACK, width=90, on_click=Objective_clicked)
-    choise_row=ft.Row(
-        [Max_btn,Min_btn],
+    Max_btn = ft.ElevatedButton("Max", bgcolor=ft.colors.BLUE, color=ft.colors.WHITE, width=90, on_click=Objective_clicked)
+    Min_btn = ft.ElevatedButton("Min", bgcolor=ft.colors.GREY_200, color=ft.colors.BLACK, width=90, on_click=Objective_clicked)
+    choise_row = ft.Row(
+        [Max_btn, Min_btn],
         alignment=ft.MainAxisAlignment.CENTER,
         spacing=10
-        )
+    )
     
+    x1_input_cont = ft.TextField(label="x1 coef", width=60, height=40, text_size=12)
+    x2_input_cont = ft.TextField(label="x2 coef", width=60, height=40, text_size=12)
     
-    
-    x1_input_cont=ft.TextField(label="x1 coef",width=60,height=40,text_size=12)
-    x2_input_cont=ft.TextField(label="x2 coef",width=60,height=40,text_size=12)
-    
-    sign_dropdown=ft.Dropdown(
+    sign_dropdown = ft.Dropdown(
         options=[
             ft.dropdown.Option("<="),
             ft.dropdown.Option(">="),
             ft.dropdown.Option("<"),
             ft.dropdown.Option(">"),
             ft.dropdown.Option("="),
-            ],
+        ],
         value="<=",
         width=55,
         height=40,
         text_size=12
-        )
+    )
     
-    rhs_input=ft.TextField(label="RHS",width=55,height=40,text_size=12)
+    rhs_input = ft.TextField(label="RHS", width=55, height=40, text_size=12)
     
-    constraint_dialog=ft.AlertDialog(
-        title=ft.Text("Add new constraint",size=16,weight=ft.FontWeight.BOLD),
+    constraint_dialog = ft.AlertDialog(
+        title=ft.Text("Add new constraint", size=16, weight=ft.FontWeight.BOLD),
         content=ft.Row(
-            [x1_input_cont,x2_input_cont,sign_dropdown,rhs_input],
+            [x1_input_cont, x2_input_cont, sign_dropdown, rhs_input],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=3
-            ),
+        ),
         actions=[
-            ft.TextButton("Cansel",on_click=lambda e: close_dlg(e)),
-            ft.TextButton("Add",on_click=lambda e: save_constraint(e))
-            ],
+            ft.TextButton("Cansel", on_click=lambda e: close_dlg(e)),
+            ft.TextButton("Add", on_click=lambda e: save_constraint(e))
+        ],
         actions_alignment=ft.MainAxisAlignment.END
-        )
+    )
     def open_dlg(e):
         if constraint_dialog not in page.overlay:
             page.overlay.append(constraint_dialog)
-        constraint_dialog.open=True
+        constraint_dialog.open = True
         page.update()
+        
     def save_constraint(e):
-        c1=x1_input_cont.value.strip() if x1_input_cont.value else "0"
-        c2=x2_input_cont.value.strip() if x2_input_cont.value else "0"
-        sign=sign_dropdown.value
-        rhs=rhs_input.value.strip() if rhs_input.value else "0"
+        c1 = x1_input_cont.value.strip() if x1_input_cont.value else "0"
+        c2 = x2_input_cont.value.strip() if x2_input_cont.value else "0"
+        sign = sign_dropdown.value
+        rhs = rhs_input.value.strip() if rhs_input.value else "0"
         new_constraint = {"c1": c1, "c2": c2, "sign": sign, "rhs": rhs}
         constraints_list.append(new_constraint)
-        x1_input_cont.value=""
-        x2_input_cont.value=""
-        rhs_input.value=""
-        sign_dropdown.value="<="
-        constraint_dialog.open=False
+        x1_input_cont.value = ""
+        x2_input_cont.value = ""
+        rhs_input.value = ""
+        sign_dropdown.value = "<="
+        constraint_dialog.open = False
         update_constraints_ui()
         page.update()
+        
     def close_dlg(e):
-        constraint_dialog.open=False
+        constraint_dialog.open = False
         page.update()    
     
+    constraints_list = []
+    constraints_title = ft.Text("Constraints", size=18, weight=ft.FontWeight.BOLD)
+    constaints_column = ft.Column(spacing=5)
     
-    constraints_list=[]
-    constraints_title=ft.Text("Constraints",size=18,weight=ft.FontWeight.BOLD)
-    constaints_column=ft.Column(spacing=5)
     def update_constraints_ui():
         constaints_column.controls.clear()
-        for i,constraint in enumerate(constraints_list):
-            def remove_constraint(e,idx=i):
+        for i, constraint in enumerate(constraints_list):
+            def remove_constraint(e, idx=i):
                 constraints_list.pop(idx)
                 update_constraints_ui()
                 page.update()
             c_text = f"({i+1}) {constraint['c1']}x1 + {constraint['c2']}x2 {constraint['sign']} {constraint['rhs']}"    
-            row_item=ft.Row(
+            row_item = ft.Row(
                 [
-                    ft.Text(c_text,size=14,weight=ft.FontWeight.W_500),
-                    ft.IconButton(icon=ft.Icons.DELETE_OUTLINE,icon_color=ft.Colors.RED_400,
+                    ft.Text(c_text, size=14, weight=ft.FontWeight.W_500),
+                    ft.IconButton(icon=ft.icons.DELETE_OUTLINE, icon_color=ft.colors.RED_400,
                                   on_click=remove_constraint
                                   )
-                    ],
+                ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 width=290
-                )
+            )
             constaints_column.controls.append(row_item)
     update_constraints_ui()        
     
-    add_contraint_btn=ft.TextButton("Add Constraint +",icon=ft.Icons.ADD,on_click=open_dlg)
-    constraint_container=ft.Container(
+    add_contraint_btn = ft.TextButton("Add Constraint +", icon=ft.icons.ADD, on_click=open_dlg)
+    constraint_container = ft.Container(
         content=ft.Column(
-            [constraints_title,constaints_column,add_contraint_btn],
+            [constraints_title, constaints_column, add_contraint_btn],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=5
-            ),
+        ),
         padding=10,
-        border=ft.border.all(1,ft.Colors.GREY_300),
+        border=ft.border.all(1, ft.colors.GREY_300),
         border_radius=10,
         width=320
-        )
+    )
     
-    
-    result_display=ft.Text("Z = -- ",size=20,weight=ft.FontWeight.BOLD,color=ft.Colors.GREEN_700)
-    details_desplay=ft.Text("x1= -- , x2 = -- ",size=14)
-    
+    result_display = ft.Text("Z = -- ", size=20, weight=ft.FontWeight.BOLD, color=ft.colors.GREEN_700)
+    details_desplay = ft.Text("x1= -- , x2 = -- ", size=14)
     
     def solve_simplex(c1, c2, constraints, obj_type):
         mult = 1.0
@@ -222,13 +218,11 @@ def main(page: ft.Page):
         z_val = table[m][-1] * mult
         return x1_val, x2_val, z_val
     
-    
     def calculate_clicked(e):
         try:
-            c1=float(x1_input.value) if x1_input.value else 0.0
-            c2=float(x2_input.value) if x2_input.value else 0.0
-            
-            details_desplay.value=f"x1 = {c1} , x2 = {c2}"
+            c1 = float(x1_input.value) if x1_input.value else 0.0
+            c2 = float(x2_input.value) if x2_input.value else 0.0
+            details_desplay.value = f"x1 = {c1} , x2 = {c2}"
             page.update()
         except ValueError:
             details_desplay.value = "Please enter valid numbers for objective function!"
@@ -242,8 +236,6 @@ def main(page: ft.Page):
             return
 
         obj_type = selected_objective
-        
-      
         x1_res, x2_res, z_res = solve_simplex(c1, c2, constraints_list, obj_type)
         
         if z_res == "Unbounded":
@@ -255,43 +247,35 @@ def main(page: ft.Page):
             
         page.update()
         
-        
-    calc_button = ft.ElevatedButton(text="calculate",bgcolor=ft.Colors.BLUE_600,color=ft.Colors.WHITE,width=200, on_click=calculate_clicked)    
+    calc_button = ft.ElevatedButton(text="calculate", bgcolor=ft.colors.BLUE_600, color=ft.colors.WHITE, width=200, on_click=calculate_clicked)    
     
-    
-    result_container=ft.Container(
+    result_container = ft.Container(
         content=ft.Column(
             [
-                ft.Text("Result",size=14,weight=ft.FontWeight.BOLD),
+                ft.Text("Result", size=14, weight=ft.FontWeight.BOLD),
                 result_display,
                 details_desplay,
-                ],
+            ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=5
-            ),
+        ),
         padding=15,
-        border=ft.border.all(1,ft.Colors.GREEN_300),
+        border=ft.border.all(1, ft.colors.GREEN_300),
         border_radius=10,
-        bgcolor=ft.Colors.GREEN_50,
+        bgcolor=ft.colors.GREEN_50,
         width=320
-        )
+    )
     
-    
-    page.add(title_text,
-             inputs_row,
-             choise_row,
-             ft.Divider(height=20,color=ft.Colors.TRANSPARENT),
-             constraint_container,
-             ft.Divider(height=20,color=ft.Colors.TRANSPARENT),
-             calc_button,
-             ft.Divider(height=20,color=ft.Colors.TRANSPARENT),
-             result_container
-             )
-    
+    page.add(
+        title_text,
+        inputs_row,
+        choise_row,
+        ft.Divider(height=20, color=ft.colors.TRANSPARENT),
+        constraint_container,
+        ft.Divider(height=20, color=ft.colors.TRANSPARENT),
+        calc_button,
+        ft.Divider(height=20, color=ft.colors.TRANSPARENT),
+        result_container
+    )
     
     page.update()
-    
-    
-
-    
-    
