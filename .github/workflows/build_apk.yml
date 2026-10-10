@@ -19,7 +19,7 @@ jobs:
       - name: Install Flet and Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flet
+          pip install "flet==0.25.2"
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Rename app file for build
