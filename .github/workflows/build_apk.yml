@@ -35,4 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: simplex-app-apk
-          path: build/apk/app-release.apk
+          path: |
+            build/apk/app-release.apk
+            build/app/outputs/flutter-apk/app-release.apk
+            **/app-release.apk
